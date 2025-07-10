@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/contacts';
+const API_URL = 'https://skyroot-server.onrender.com/api/contacts';
 
 const getAllContacts = async () => {
   const response = await axios.get(API_URL, {
