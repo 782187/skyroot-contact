@@ -13,6 +13,10 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <marquee behavior="alternate" scrollamount="10" style="color: red; font-weight: bold; font-size: 18px;">
+          Request, Response may take 20 to 30s. It is hosted on the free version of Render.
+        </marquee>
+
         <Navbar />
         <div className="container mt-4">
           <Routes>
