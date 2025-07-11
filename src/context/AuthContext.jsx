@@ -59,10 +59,17 @@ export const AuthProvider = ({ children }) => {
       await authService.logout();
       setUser(null);
       navigate('/login');
-    } catch (error) {}
+    } catch (error) { }
   };
 
-  if (loading) return <div>Checking authentication...</div>;
+  if (loading) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  );
+
 
   return (
     <AuthContext.Provider value={{ user, loading, login, register, logout }}>
