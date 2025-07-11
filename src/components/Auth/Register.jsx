@@ -20,7 +20,7 @@ const Register = () => {
 
   return (
     <div className="row justify-content-center mt-5">
-      <div className="col-md-6 col-lg-4" style={{width: "50%"}}>
+      <div className="col-md-6 col-lg-4 form-width">
         <div className="card shadow">
           <div className="card-header bg-success text-white">
             <h3 className="text-center mb-0">
