@@ -10,19 +10,22 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuthStatus();
+    const checkWithRetry = async (retries = 3) => {
+      try {
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+      } catch (error) {
+        if (retries > 0) {
+          setTimeout(() => checkWithRetry(retries - 1), 3000);
+        } else {
+          setUser(null);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkWithRetry();
   }, []);
-
-  const checkAuthStatus = async () => {
-    try {
-      const userData = await authService.getCurrentUser();
-      setUser(userData);
-    } catch (error) {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const login = async (username, password) => {
     try {
@@ -31,9 +34,9 @@ export const AuthProvider = ({ children }) => {
       navigate('/dashboard');
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Login failed' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Login failed'
       };
     }
   };
@@ -56,20 +59,14 @@ export const AuthProvider = ({ children }) => {
       await authService.logout();
       setUser(null);
       navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    } catch (error) {}
   };
 
+  if (loading) return <div>Checking authentication...</div>;
+
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading,
-      login, 
-      register, 
-      logout 
-    }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+      {children}
     </AuthContext.Provider>
   );
 };
